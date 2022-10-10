@@ -1,15 +1,46 @@
 import closeIconPath from "../images/close-icon.svg";
+import React from "react";
 
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
 
 function App() {
+
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+
+  const handleEditAvatarClick = () => {
+    const popup = document.querySelector(".popup_action_change-avatar");
+    popup.classList.add("popup_active");
+    setIsEditAvatarPopupOpen(true);
+    
+  }
+
+  const handleEditProfileClick = () => {
+    const popup = document.querySelector(".popup_action_edit");
+    popup.classList.add("popup_active");
+    setIsEditAvatarPopupOpen(true);
+  }
+
+  const handleAddPlaceClick = () => {
+    const popup = document.querySelector(".popup_action_add-post");
+    popup.classList.add("popup_active");
+    setIsAddPlacePopupOpen(true);
+  }
+
   return (
     <>
       <div className="page__container">
         <Header />
-        <Main />
+        <Main 
+        onEditAvatar= {handleEditAvatarClick}
+        onEditProfile = {handleEditProfileClick}
+        onAddPlace = {handleAddPlaceClick}
+        />
         <Footer />
 
         <section className="popup popup_action_edit">

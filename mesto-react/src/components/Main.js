@@ -2,11 +2,13 @@ import avatarPath from "../images/profile-avatar.jpg";
 import penIconPath from "../images/pen-icon.svg";
 import plusIconPath from "../images/plus-icon.svg";
 
-function Main() {
+const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
+
   return (
     <main>
       <section className="profile">
-        <button className="profile__avatar-button">
+        <button className="profile__avatar-button" 
+              onClick={onEditAvatar}>
           <div className="profile__avatar-mask">
             <img
               src={avatarPath}
@@ -22,6 +24,7 @@ function Main() {
               className="profile__edit-button"
               aria-label="Редактировать"
               type="button"
+              onClick={onEditProfile}
             >
               <img
                 src={penIconPath}
@@ -36,6 +39,7 @@ function Main() {
           className="profile__add-button"
           aria-label="Добавить пост"
           type="button"
+          onClick={onAddPlace}
         >
           <img src={plusIconPath} alt="Плюс" className="profile__plus-icon" />
         </button>
