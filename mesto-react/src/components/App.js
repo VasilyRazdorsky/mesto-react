@@ -1,9 +1,11 @@
-import closeIconPath from "../images/close-icon.svg";
+
 import React from "react";
 
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
+import PopupWithForm from "./PopupWithForm";
+import ImagePopup from "./ImagePopup";
 
 function App() {
 
@@ -14,22 +16,21 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
 
   const handleEditAvatarClick = () => {
-    const popup = document.querySelector(".popup_action_change-avatar");
-    popup.classList.add("popup_active");
     setIsEditAvatarPopupOpen(true);
-    
   }
 
   const handleEditProfileClick = () => {
-    const popup = document.querySelector(".popup_action_edit");
-    popup.classList.add("popup_active");
-    setIsEditAvatarPopupOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   const handleAddPlaceClick = () => {
-    const popup = document.querySelector(".popup_action_add-post");
-    popup.classList.add("popup_active");
     setIsAddPlacePopupOpen(true);
+  }
+
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
   }
 
   return (
@@ -43,28 +44,12 @@ function App() {
         />
         <Footer />
 
-        <section className="popup popup_action_edit">
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_edit-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <h2 className="popup__header">Редактировать профиль</h2>
-
-            <form
-              action="#"
-              className="popup__form popup__form_place_edit-popup"
-              name="edit-profile"
-              noValidate
-            >
+        <PopupWithForm 
+          title="Редактировать профиль"
+          name="edit"
+          isOpen={isEditProfilePopupOpen}
+          children={
+            <>
               <input
                 type="text"
                 name="name"
@@ -87,35 +72,17 @@ function App() {
                 maxLength="200"
               />
               <span className="popup__error info-input-error"></span>
-              <button type="submit" className="popup__save-button">
-                Сохранить
-              </button>
-            </form>
-          </div>
-        </section>
+            </>
+          }
+          onClose={closeAllPopups}
+        />
 
-        <section className="popup popup_action_add-post">
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_add-post-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <h2 className="popup__header">Новое место</h2>
-
-            <form
-              action="#"
-              className="popup__form popup__form_place_add-post-popup"
-              name="add-post"
-              noValidate
-            >
+        <PopupWithForm
+          title="Новое место"
+          name="add-post"
+          isOpen={isAddPlacePopupOpen}
+          children={
+            <>
               <input
                 type="text"
                 name="postName"
@@ -138,75 +105,29 @@ function App() {
                 required
               />
               <span className="popup__error url-input-error"></span>
-              <button type="submit" className="popup__save-button">
-                Сохранить
-              </button>
-            </form>
-          </div>
-        </section>
+            </>
+          }
+          onClose={closeAllPopups}
+        />
 
-        <section className="popup popup_action_view-post">
-          <div className="popup__container popup__container_place_view-post-popup">
-            <button
-              className="popup__close-button popup__close-button_place_view-post-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <img src="#" alt="#" className="popup__photo" />
-            <p className="popup__photo-place"></p>
-          </div>
-        </section>
-
-        <section className="popup popup_action_delete-card">
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_view-post-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <h2 className="popup__header popup__header_place_delete-card">
-              Вы уверены?
-            </h2>
-            <button className="popup__save-button popup__save-button_place_delete-card">
+        <PopupWithForm
+          title="Вы уверены?"
+          name="delete-card"
+          children={
+            <>
+              <button className="popup__save-button popup__save-button_place_delete-card">
               Да
             </button>
-          </div>
-        </section>
+            </>
+          }
+        />
 
-        <section className="popup popup_action_change-avatar">
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_change-avatar-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-            <h2 className="popup__header">Обновить аватар</h2>
-            <form
-              action="#"
-              className="popup__form popup__form_place_change-avatar-popup"
-              name="change-avatar"
-              noValidate
-            >
+        <PopupWithForm
+          title="Обновить аватар"
+          name="change-avatar"
+          isOpen={isEditAvatarPopupOpen}
+          children={
+            <>
               <input
                 type="url"
                 name="avatarLink"
@@ -217,12 +138,12 @@ function App() {
                 required
               />
               <span className="popup__error avatar-input-error"></span>
-              <button type="submit" className="popup__save-button">
-                Сохранить
-              </button>
-            </form>
-          </div>
-        </section>
+            </>
+          }
+          onClose={closeAllPopups}
+        />
+
+        <ImagePopup />
       </div>
 
       <template className="element-template">

@@ -1,6 +1,7 @@
 import React from "react";
+import closeIconPath from "../images/close-icon.svg";
 
-function ImagePopup() {
+const ImagePopup = () => {
     return (
         <section className="popup popup_action_view-post">
           <div className="popup__container popup__container_place_view-post-popup">
@@ -22,3 +23,5 @@ function ImagePopup() {
         </section>
     );
 }
+
+export default ImagePopup;
