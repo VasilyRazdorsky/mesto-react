@@ -9,8 +9,18 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
   const [userName, setUserName] = React.useState("");
   const [userDescription, setUserDescription] = React.useState("");
   const [userAvatar, setUserAvatar] = React.useState("");
+  const [userId, setUserId] = React.useState("");
 
   const [cards, setCards] = React.useState([]);
+
+  const checkIfIsLiked = (likes) => {
+    likes.forEach(obj => {
+      if(obj._id === userId){
+        return true;
+      }
+    })
+    return false;
+  }
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -18,6 +28,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
         setUserName(userInfo.name);
         setUserDescription(userInfo.about);
         setUserAvatar(userInfo.avatar);
+        setUserId(userInfo._id);
       })
       .catch((err) => {
         console.log(`Ошибка ${err}`);
@@ -26,7 +37,6 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
     api.getCardsInfo()
       .then((cardsInfo) => {
         setCards(cardsInfo);
-        console.log(cardsInfo);
       })
       .catch((err) => {
         console.log(`Ошибка ${err}`);
@@ -80,12 +90,15 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
       <section className="elements">
         {
           cards.map((cardInfo) => <Card
-          id={cardInfo._id}
+          key={cardInfo._id}
           src={cardInfo.link}
           alt={cardInfo.name}
           title={cardInfo.name}
+          isMine={(cardInfo.owner._id === userId) ? true : false}
+          likes={cardInfo.likes}
+          isLiked={checkIfIsLiked(cardInfo.likes)}
           />)
-        
+          
         }
       </section>
     </main>
