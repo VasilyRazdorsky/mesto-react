@@ -1,8 +1,40 @@
-import avatarPath from "../images/profile-avatar.jpg";
+import React from "react";
 import penIconPath from "../images/pen-icon.svg";
 import plusIconPath from "../images/plus-icon.svg";
+import api from "../utils/Api";
+import Card from "./Card";
 
 const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
+
+  const [userName, setUserName] = React.useState("");
+  const [userDescription, setUserDescription] = React.useState("");
+  const [userAvatar, setUserAvatar] = React.useState("");
+
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((userInfo) => {
+        setUserName(userInfo.name);
+        setUserDescription(userInfo.about);
+        setUserAvatar(userInfo.avatar);
+      })
+      .catch((err) => {
+        console.log(`Ошибка ${err}`);
+      });
+
+    api.getCardsInfo()
+      .then((cardsInfo) => {
+        setCards(cardsInfo);
+        console.log(cardsInfo);
+      })
+      .catch((err) => {
+        console.log(`Ошибка ${err}`);
+      });
+  }, []);
+
+  
+
 
   return (
     <main>
@@ -11,7 +43,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
               onClick={onEditAvatar}>
           <div className="profile__avatar-mask">
             <img
-              src={avatarPath}
+              src={userAvatar}
               alt="Аватар профиля"
               className="profile__avatar"
             />
@@ -19,7 +51,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
         </button>
         <div className="profile__info">
           <div className="profile__info-first-line">
-            <h1 className="profile__name">Жак-Ив Кусто</h1>
+            <h1 className="profile__name">{userName}</h1>
             <button
               className="profile__edit-button"
               aria-label="Редактировать"
@@ -33,7 +65,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
               />
             </button>
           </div>
-          <p className="profile__more-info">Исследователь океана</p>
+          <p className="profile__more-info">{userDescription}</p>
         </div>
         <button
           className="profile__add-button"
@@ -45,7 +77,17 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
         </button>
       </section>
 
-      <section className="elements"></section>
+      <section className="elements">
+        {
+          cards.map((cardInfo) => <Card
+          id={cardInfo._id}
+          src={cardInfo.link}
+          alt={cardInfo.name}
+          title={cardInfo.name}
+          />)
+        
+        }
+      </section>
     </main>
   );
 }
