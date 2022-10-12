@@ -1,6 +1,10 @@
 import React from "react";
 
-const Card = ({src, alt, title, isMine, likes, isLiked}) => {
+const Card = ({src, alt, title, isMine, likes, onCardClick}) => {
+
+    function handleClick() {
+        onCardClick(src, title);
+    }
 
     return (
         <div className="element">
@@ -8,6 +12,7 @@ const Card = ({src, alt, title, isMine, likes, isLiked}) => {
                 className="element__view-button"
                 aria-label="Посмотреть фото"
                 type="button"
+                onClick={handleClick}
             >
                 <img src={src} alt={alt} className="element__photo" />
             </button>
@@ -15,7 +20,7 @@ const Card = ({src, alt, title, isMine, likes, isLiked}) => {
                 <h2 className="element__name">{title}</h2>
                 <div className="element__like-container">
                     <button
-                      className={`element__like-button ${isLiked ? "element__like-button_active" : ""}`}
+                      className={`element__like-button`}
                       aria-label="Оценить пост"
                       type="button"
                     ></button>

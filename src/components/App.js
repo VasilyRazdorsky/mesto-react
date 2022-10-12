@@ -1,6 +1,4 @@
-
 import React from "react";
-
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -14,8 +12,16 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
 
-  const [selectedCard, setSelectedCard] = React.useState();
+  const [selectedCard, setSelectedCard] = React.useState({
+    link: "",
+    name: "",
+    isOpen: false
+  });
+
+
 
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(true);
@@ -29,10 +35,28 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  const handleDeleteCardClick = () => {
+    setIsDeleteCardPopupOpen(true);
+  }
+
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setIsDeleteCardPopupOpen(false);
+    setSelectedCard({
+      link: "",
+      name: "",
+      isOpen: false,
+    })
+  }
+
+  const handleCardClick = (link, name) => {
+    setSelectedCard({
+      link: link,
+      name: name,
+      isOpen: true,
+    })
   }
 
   return (
@@ -43,6 +67,8 @@ function App() {
         onEditAvatar= {handleEditAvatarClick}
         onEditProfile = {handleEditProfileClick}
         onAddPlace = {handleAddPlaceClick}
+        onDeleteCard = {handleDeleteCardClick}
+        onCardClick = {handleCardClick}
         />
         <Footer />
 
@@ -77,6 +103,7 @@ function App() {
             </>
           }
           onClose={closeAllPopups}
+          submitButtonText="Сохранить"
         />
 
         <PopupWithForm
@@ -110,18 +137,18 @@ function App() {
             </>
           }
           onClose={closeAllPopups}
+          submitButtonText="Сохранить"
         />
 
         <PopupWithForm
           title="Вы уверены?"
           name="delete-card"
+          isOpen={isDeleteCardPopupOpen}
           children={
-            <>
-              <button className="popup__save-button popup__save-button_place_delete-card">
-              Да
-            </button>
-            </>
+            <></>
           }
+          onClose={closeAllPopups}
+          submitButtonText="Да"
         />
 
         <PopupWithForm
@@ -143,9 +170,13 @@ function App() {
             </>
           }
           onClose={closeAllPopups}
+          submitButtonText="Сохранить"
         />
 
-        <ImagePopup />
+        <ImagePopup
+        card={selectedCard}
+        onClose={closeAllPopups}
+        />
       </div>
     </>
   );

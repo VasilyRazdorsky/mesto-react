@@ -4,7 +4,7 @@ import plusIconPath from "../images/plus-icon.svg";
 import api from "../utils/Api";
 import Card from "./Card";
 
-const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
+const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardClick }) => {
 
   const [userName, setUserName] = React.useState("");
   const [userDescription, setUserDescription] = React.useState("");
@@ -12,15 +12,6 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
   const [userId, setUserId] = React.useState("");
 
   const [cards, setCards] = React.useState([]);
-
-  const checkIfIsLiked = (likes) => {
-    likes.forEach(obj => {
-      if(obj._id === userId){
-        return true;
-      }
-    })
-    return false;
-  }
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -96,7 +87,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace }) => {
           title={cardInfo.name}
           isMine={(cardInfo.owner._id === userId) ? true : false}
           likes={cardInfo.likes}
-          isLiked={checkIfIsLiked(cardInfo.likes)}
+          onCardClick = {onCardClick}
           />)
           
         }
