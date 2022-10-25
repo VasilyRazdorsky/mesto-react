@@ -3,28 +3,15 @@ import penIconPath from "../images/pen-icon.svg";
 import plusIconPath from "../images/plus-icon.svg";
 import api from "../utils/Api";
 import Card from "./Card";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardClick }) => {
 
-  const [userName, setUserName] = React.useState("");
-  const [userDescription, setUserDescription] = React.useState("");
-  const [userAvatar, setUserAvatar] = React.useState("");
-  const [userId, setUserId] = React.useState("");
+  const currentUser = React.useContext(CurrentUserContext);
 
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
-    api.getUserInfo()
-      .then((userInfo) => {
-        setUserName(userInfo.name);
-        setUserDescription(userInfo.about);
-        setUserAvatar(userInfo.avatar);
-        setUserId(userInfo._id);
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      });
-
     api.getCardsInfo()
       .then((cardsInfo) => {
         setCards(cardsInfo);
@@ -35,8 +22,6 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
   }, []);
 
   
-
-
   return (
     <main>
       <section className="profile">
@@ -44,7 +29,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
               onClick={onEditAvatar}>
           <div className="profile__avatar-mask">
             <img
-              src={userAvatar}
+              src={currentUser.avatar}
               alt="Аватар профиля"
               className="profile__avatar"
             />
@@ -52,7 +37,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
         </button>
         <div className="profile__info">
           <div className="profile__info-first-line">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser.name}</h1>
             <button
               className="profile__edit-button"
               aria-label="Редактировать"
@@ -66,7 +51,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
               />
             </button>
           </div>
-          <p className="profile__more-info">{userDescription}</p>
+          <p className="profile__more-info">{currentUser.about}</p>
         </div>
         <button
           className="profile__add-button"
@@ -85,7 +70,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
           src={cardInfo.link}
           alt={cardInfo.name}
           title={cardInfo.name}
-          isMine={(cardInfo.owner._id === userId) ? true : false}
+          isMine={(cardInfo.owner._id === currentUser.id) ? true : false}
           likes={cardInfo.likes}
           onCardClick = {onCardClick}
           />)

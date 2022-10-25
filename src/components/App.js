@@ -1,4 +1,6 @@
 import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import api from "../utils/Api";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -7,33 +9,26 @@ import ImagePopup from "./ImagePopup";
 
 function App() {
 
+  // Работа с попапами
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-  
-  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
-
-  const [selectedCard, setSelectedCard] = React.useState({
-    link: "",
-    name: "",
-    isOpen: false
-  });
-
-
-
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(true);
-  }
 
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(true);
   }
 
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(true);
   }
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+
+  const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
+  }
+  
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = React.useState(false);
 
   const handleDeleteCardClick = () => {
     setIsDeleteCardPopupOpen(true);
@@ -51,6 +46,14 @@ function App() {
     })
   }
 
+
+  // Работа с выбранной карточкой
+  const [selectedCard, setSelectedCard] = React.useState({
+    link: "",
+    name: "",
+    isOpen: false
+  });
+
   const handleCardClick = (link, name) => {
     setSelectedCard({
       link: link,
@@ -59,8 +62,29 @@ function App() {
     })
   }
 
+  // Работа с контекстом currentUser
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  React.useEffect(() => {
+    api.getUserInfo()
+      .then((userInfo) => {
+        setCurrentUser({
+          name: userInfo.name,
+          about: userInfo.about,
+          avatar: userInfo.avatar,
+          id: userInfo._id
+        })
+      })
+      .catch((err) => {
+        console.log(`Ошибка ${err}`);
+      });
+  }, []);
+
+  
+  
+
   return (
-    <>
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
         <Header />
         <Main 
@@ -178,7 +202,7 @@ function App() {
         onClose={closeAllPopups}
         />
       </div>
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 
