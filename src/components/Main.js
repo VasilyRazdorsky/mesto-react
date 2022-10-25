@@ -21,7 +21,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
       });
   }, []);
 
-  
+
   return (
     <main>
       <section className="profile">
@@ -67,11 +67,10 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
         {
           cards.map((cardInfo) => <Card
           key={cardInfo._id}
+          card={cardInfo}
           src={cardInfo.link}
           alt={cardInfo.name}
           title={cardInfo.name}
-          isMine={(cardInfo.owner._id === currentUser.id) ? true : false}
-          likes={cardInfo.likes}
           onCardClick = {onCardClick}
           />)
           

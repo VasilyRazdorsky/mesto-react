@@ -1,6 +1,11 @@
 import React from "react";
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-const Card = ({src, alt, title, isMine, likes, onCardClick}) => {
+const Card = ({card, src, alt, title, onCardClick}) => {
+    const currentUser = React.useContext(CurrentUserContext);
+    const isOwn = card.owner._id === currentUser.id;
+    const isLiked = card.likes.some(i => i._id === currentUser.id);
+    const cardLikeButtonClassName = isLiked ? `element__like-button element__like-button_active` : `element__like-button`;
 
     function handleClick() {
         onCardClick(src, title);
@@ -20,15 +25,15 @@ const Card = ({src, alt, title, isMine, likes, onCardClick}) => {
                 <h2 className="element__name">{title}</h2>
                 <div className="element__like-container">
                     <button
-                      className={`element__like-button`}
+                      className={cardLikeButtonClassName}
                       aria-label="Оценить пост"
                       type="button"
                     ></button>
-                    <p className="element__like-counter">{likes.length}</p>
+                    <p className="element__like-counter">{card.likes.length}</p>
                 </div>
             </div>
             {
-                isMine ? <button
+                isOwn ? <button
                 className="element__remove-button"
                 aria-label="Удалить пост"
                 type="button"
