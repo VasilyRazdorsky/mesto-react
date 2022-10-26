@@ -24,7 +24,6 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
   function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser.id);
     if(isLiked){
-      console.log("dislike");
       api.deleteLikeFromPost(card._id)
       .then((newCard) => {
         setCards(cards.map((c) => c._id === card._id ? newCard : c));
@@ -33,7 +32,6 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
         console.log(`Ошибка ${err}`);
       })
     } else {
-      console.log("like");
       api.addLikeOnPost(card._id)
       .then((newCard) => {
         setCards(cards.map((c) => c._id === card._id ? newCard : c));
@@ -42,6 +40,16 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
         console.log(`Ошибка ${err}`);
       })
     }
+  }
+
+  function handleDeleteCard(card){
+    api.deleteCard(card._id)
+    .then((res) => {
+      setCards(cards.filter((c) => c._id !== card._id));
+    })
+    .catch((err) => {
+      console.log(`Ошибка ${err}`);
+    })
   }
 
 
@@ -96,6 +104,7 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
           title={cardInfo.name}
           onCardClick = {onCardClick}
           onCardLike = {handleCardLike}
+          onDeleteCard = {handleDeleteCard}
           />)
           
         }
