@@ -4,15 +4,21 @@ import plusIconPath from "../images/plus-icon.svg";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardClick, cards, onCardLike, onCardDelete }) => {
-
+const Main = ({
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardClick,
+  cards,
+  onCardLike,
+  onCardDelete,
+}) => {
   const currentUser = React.useContext(CurrentUserContext);
 
   return (
     <main>
       <section className="profile">
-        <button className="profile__avatar-button" 
-              onClick={onEditAvatar}>
+        <button className="profile__avatar-button" onClick={onEditAvatar}>
           <div className="profile__avatar-mask">
             <img
               src={currentUser.avatar}
@@ -50,22 +56,21 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
       </section>
 
       <section className="elements">
-        {
-          cards.map((cardInfo) => <Card
-          key={cardInfo._id}
-          card={cardInfo}
-          src={cardInfo.link}
-          alt={cardInfo.name}
-          title={cardInfo.name}
-          onCardClick = {onCardClick}
-          onCardLike = {onCardLike}
-          onDeleteCard = {onCardDelete}
-          />)
-          
-        }
+        {cards.map((cardInfo) => (
+          <Card
+            key={cardInfo._id}
+            card={cardInfo}
+            src={cardInfo.link}
+            alt={cardInfo.name}
+            title={cardInfo.name}
+            onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+          />
+        ))}
       </section>
     </main>
   );
-}
+};
 
 export default Main;
