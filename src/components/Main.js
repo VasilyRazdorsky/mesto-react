@@ -1,57 +1,12 @@
 import React from "react";
 import penIconPath from "../images/pen-icon.svg";
 import plusIconPath from "../images/plus-icon.svg";
-import api from "../utils/Api";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardClick }) => {
+const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardClick, cards, onCardLike, onCardDelete }) => {
 
   const currentUser = React.useContext(CurrentUserContext);
-
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getCardsInfo()
-      .then((cardsInfo) => {
-        setCards(cardsInfo);
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      });
-  }, []);
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser.id);
-    if(isLiked){
-      api.deleteLikeFromPost(card._id)
-      .then((newCard) => {
-        setCards(cards.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      })
-    } else {
-      api.addLikeOnPost(card._id)
-      .then((newCard) => {
-        setCards(cards.map((c) => c._id === card._id ? newCard : c));
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      })
-    }
-  }
-
-  function handleDeleteCard(card){
-    api.deleteCard(card._id)
-    .then((res) => {
-      setCards(cards.filter((c) => c._id !== card._id));
-    })
-    .catch((err) => {
-      console.log(`Ошибка ${err}`);
-    })
-  }
-
 
   return (
     <main>
@@ -103,8 +58,8 @@ const Main = ({ onEditAvatar, onEditProfile, onAddPlace, onDeleteCard, onCardCli
           alt={cardInfo.name}
           title={cardInfo.name}
           onCardClick = {onCardClick}
-          onCardLike = {handleCardLike}
-          onDeleteCard = {handleDeleteCard}
+          onCardLike = {onCardLike}
+          onDeleteCard = {onCardDelete}
           />)
           
         }
