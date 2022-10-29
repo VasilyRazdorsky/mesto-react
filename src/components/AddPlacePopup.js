@@ -1,5 +1,5 @@
 import React from "react";
-import closeIconPath from "../images/close-icon.svg";
+import PopupWithForm from "./PopupWithForm";
 
 const AddPlacePopup = ({isOpen, onClose, onAddPlace}) => {
 
@@ -25,32 +25,20 @@ const AddPlacePopup = ({isOpen, onClose, onAddPlace}) => {
         setLink("");
     }
 
+    function handleClose(){
+      onClose();
+      setPostName("");
+      setLink("");
+    }
+
     return (
-        <section className={`popup popup_add-post ${isOpen ? "popup_active" : ""}`}>
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_add-post-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-              onClick={onClose}
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <h2 className="popup__header">Новое место</h2>
-
-            <form
-              action="#"
-              className="popup__form popup__form_place_add-post-popup"
-              name="edit-profile"
-              noValidate
-              onSubmit={handleSubmit}
-            >
-              <input
+      <PopupWithForm
+        title="Новое место"
+        name="add-post"
+        isOpen={isOpen}
+        children={
+          <>
+            <input
                 type="text"
                 name="postName"
                 placeholder="Название"
@@ -74,12 +62,12 @@ const AddPlacePopup = ({isOpen, onClose, onAddPlace}) => {
                 onChange={handleSetLink}
               />
               <span className="popup__error url-input-error"></span>
-              <button type="submit" className="popup__save-button">
-                Сохранить
-              </button>
-            </form>
-          </div>
-        </section>
+          </>
+        }
+        onClose={handleClose}
+        submitButtonText="Сохранить"
+        onSubmit={handleSubmit}
+      />
     );
 }
 

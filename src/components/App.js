@@ -1,6 +1,6 @@
 import React from "react";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import api from "../utils/Api";
+import api from "../utils/api";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -11,31 +11,29 @@ import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 
 function App() {
-  // Работа с попапами
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
 
-  const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(true);
-  };
+  // Работа с контекстом currentUser
+  const [currentUser, setCurrentUser] = React.useState({});
 
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  React.useEffect(() => {
+    api
+      .getUserInfo()
+      .then((userInfo) => {
+        setCurrentUser({
+          name: userInfo.name,
+          about: userInfo.about,
+          avatar: userInfo.avatar,
+          id: userInfo._id,
+        });
+      })
+      .catch((err) => {
+        console.log(`Ошибка ${err}`);
+      });
+  }, []);
 
-  const handleAddPlaceClick = () => {
-    setIsAddPlacePopupOpen(true);
-  };
+  // Работа с закрытием всех попапов
 
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
-
-  const handleEditAvatarClick = () => {
-    setIsEditAvatarPopupOpen(true);
-  };
-
-  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] =
-    React.useState(false);
-
-  const closeAllPopups = () => {
+  function closeAllPopups(){
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -62,26 +60,15 @@ function App() {
     });
   };
 
-  // Работа с контекстом currentUser
-  const [currentUser, setCurrentUser] = React.useState({});
-
-  React.useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userInfo) => {
-        setCurrentUser({
-          name: userInfo.name,
-          about: userInfo.about,
-          avatar: userInfo.avatar,
-          id: userInfo._id,
-        });
-      })
-      .catch((err) => {
-        console.log(`Ошибка ${err}`);
-      });
-  }, []);
-
   // Работа с редактированием профиля
+
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
+
+  const handleEditProfileClick = () => {
+    setIsEditProfilePopupOpen(true);
+  };
+
   function handleUpdateUser(inputValues) {
     api
       .changeUserInfo(inputValues)
@@ -98,6 +85,14 @@ function App() {
   }
 
   // Работа с редактированием аватара
+
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
+    React.useState(false);
+
+  const handleEditAvatarClick = () => {
+    setIsEditAvatarPopupOpen(true);
+  };
+
   function handleUpdateAvatar(inputValues) {
     api
       .changeAvatar(inputValues)
@@ -153,6 +148,8 @@ function App() {
   // Работа с удалением карточки
 
   const [cardToDelete, setCardToDelete] = React.useState({ test: 1 });
+  const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] =
+    React.useState(false);
 
   function handleDeleteCard(card) {
     api
@@ -174,6 +171,13 @@ function App() {
   };
 
   // Работа с добавлением карточек
+
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+
+  const handleAddPlaceClick = () => {
+    setIsAddPlacePopupOpen(true);
+  };
+
   function handleAddPlaceSubmit(cardInfo) {
     api
       .addNewCard(cardInfo)

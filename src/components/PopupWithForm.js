@@ -1,7 +1,7 @@
 import React from "react";
 import closeIconPath from "../images/close-icon.svg";
 
-const PopupWithForm = ({title, name, isOpen, children, onClose, submitButtonText}) => {
+const PopupWithForm = ({title, name, isOpen, children, onClose, submitButtonText, onSubmit}) => {
     return (
         <section className={`popup popup_action_${name} ${isOpen ? "popup_active" : ""}`}>
           <div className="popup__container">
@@ -24,6 +24,7 @@ const PopupWithForm = ({title, name, isOpen, children, onClose, submitButtonText
               action="#"
               className="popup__form popup__form_place_add-post-popup"
               name={name}
+              onSubmit={onSubmit}
               noValidate
             >
               {children}  

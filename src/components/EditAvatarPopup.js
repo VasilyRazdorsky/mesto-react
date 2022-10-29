@@ -1,5 +1,5 @@
 import React from "react";
-import closeIconPath from "../images/close-icon.svg";
+import PopupWithForm from "./PopupWithForm";
 
 const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
     
@@ -10,6 +10,10 @@ const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
         setAvatarLinkValue(e.target.value);
     }
 
+    function handleClose(){
+      onClose();
+      setAvatarLinkValue("");
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -17,34 +21,17 @@ const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
             avatar: avatarLinkRef.current.value,
         })
         setAvatarLinkValue("");
+        console.log(avatarLinkValue);
     }
 
     return (
-        <section className={`popup popup_action_change-avatar ${isOpen ? "popup_active" : ""}`}>
-          <div className="popup__container">
-            <button
-              className="popup__close-button popup__close-button_place_add-post-popup"
-              aria-label="Закрыть редактирование"
-              type="button"
-              onClick={onClose}
-            >
-              <img
-                src={closeIconPath}
-                alt="Кнопка закрыть"
-                className="popup__close-icon"
-              />
-            </button>
-
-            <h2 className="popup__header">Обновить аватар</h2>
-
-            <form
-              action="#"
-              className="popup__form popup__form_place_add-post-popup"
-              name="change-avatar"
-              onSubmit={handleSubmit}
-              noValidate
-            >
-              <input
+       <PopupWithForm
+        title="Обновить аватар"
+        name="change-avatar"
+        isOpen={isOpen}
+        children={
+          <>
+            <input
                 type="url"
                 name="avatarLink"
                 placeholder="Ссылка на картинку"
@@ -56,12 +43,12 @@ const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
                 required
               />
               <span className="popup__error avatar-input-error"></span> 
-              <button type="submit" className="popup__save-button">
-                Сохранить
-              </button>
-            </form>
-          </div>
-        </section>
+          </>
+        }
+        onClose={handleClose}
+        submitButtonText="Сохранить"
+        onSubmit={handleSubmit}
+       />
     );
 }
 
